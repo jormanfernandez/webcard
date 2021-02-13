@@ -20,7 +20,7 @@ require "./src/exceptions/RequestException.php";
 
 # Request and response
 require "./src/router/Response.php";
-require "./src/router/responses/CreateWebCardResponse.php";
+require "./src/router/responses/CreateUserResponse.php";
 require "./src/router/responses/GetUserInfoResponse.php";
 require "./src/router/responses/GetAllUsersTest.php";
 require "./src/router/responses/LoggedUserInfoResponse.php";

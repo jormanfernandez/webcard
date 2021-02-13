@@ -13,7 +13,8 @@ $USERS = [
         "first_name VARCHAR(200) NULL,",
         "last_name VARCHAR(200) NULL,",
         "email VARCHAR(200) NOT NULL UNIQUE,",
-        "avatar VARCHAR(300) NULL"
+        "avatar VARCHAR(300) NULL",
+        "validated TINYINT(1) DEFAULT 0",
     ],
     "fks" => [],
     "characterSet" => "utf8"
