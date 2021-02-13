@@ -1,17 +1,19 @@
 <?php
 
-require "../router/responses/LoggedUserInfoResponse.php";
-require "../router/responses/GetUserInfoResponse.php";
-require "../utils/errors.php";
-
 class Router {
     
     private static $routes = [
-        "/api/user/info/" => "LoggedUserInfoResponse",
-        "/api/user/(?P<pk>[^/]+)/" => "GetUserInfoResponse"
+        "/api/user/info/" => [
+            "method" => "get",
+            "handler" => "LoggedUserInfoResponse"
+        ],
+        "/api/user/(?P<username>[^/]+)/" => [
+            "method" => "get",
+            "handler" => "GetUserInfoResponse"
+        ]
     ];
 
-    public static function go(string $uid): string { 
+    public static function go(?string $uid): string { 
         /**
          * Handles the received request
          * 
@@ -23,7 +25,12 @@ class Router {
         $handler = NULL;
         $url_parameters = [];
 
-        foreach(self::$routes as $route => $class) { 
+        foreach(self::$routes as $route => $class) {
+
+            if (strtolower($_SERVER['REQUEST_METHOD']) !== $class["method"]) {
+                continue;
+            }
+
             $endpoint = str_replace("/", "\/", $route);
 
             $pattern = "/{$endpoint}/i";
@@ -35,12 +42,12 @@ class Router {
             }
 
             $url_parameters = $match;
-            $handler = $class;
+            $handler = $class["handler"];
             break;
         }
 
         if ($handler === NULL) {
-            throw new InvalidEndpointException(Error::$URL_NOT_FOUND);
+            throw new InvalidEndpointException(ErrorMessage::$URL_NOT_FOUND);
         }
 
         $handler = new $handler();

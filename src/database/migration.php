@@ -24,8 +24,9 @@ $WEBCARDS = [
     "rows" => [
         "id VARCHAR(13) PRIMARY KEY,",
         "created_datetime INT(10) NOT NULL,",
+        "updated_datetime INT(10) NOT NULL,",
         "is_active TINYINT(1) DEFAULT 1,",
-        "theme VARCHAR(10) DEFAULT 'normal',",
+        "theme VARCHAR(10),",
         "show_share TINYINT(1) DEFAULT 1,",
         "auto_play TINYINT(1) DEFAULT 1,",
         "opens_new_tab TINYINT(1) DEFAULT 1,",

@@ -1,9 +1,5 @@
 <?php
 
-require "../class/User.php";
-require "../exceptions/AuthorizationInvalidException.php";
-require "../utils/errors.php";
-
 class Response {
     
     protected $is_authenticated = FALSE;
@@ -59,7 +55,7 @@ class Response {
         $this->user = new User($uid);
 
         if (empty($this->user->error) === FALSE) {
-            throw new AuthorizationInvalidException(Error::$USER_DOES_NOT_EXISTS);
+            throw new AuthorizationInvalidException(ErrorMessage::$USER_DOES_NOT_EXISTS);
         }
     }
 }

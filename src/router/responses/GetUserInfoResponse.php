@@ -1,6 +1,4 @@
 <?php
-require "../Response.php";
-require "../../class/User.php";
 
 class GetUserInfoResponse extends Response {
 
@@ -8,9 +6,8 @@ class GetUserInfoResponse extends Response {
 
     public function execute(array $request, array $url_parameters): array { 
 
-        $pk = $url_parameters["pk"];
-
-        $user = new User($pk);
+        $username = $url_parameters["username"];
+        $user = new User($username, True);
 
         if (empty($user->error) !== NULL) {
             throw new Exception($user->error);

@@ -1,7 +1,5 @@
 <?php
 
-require "../utils/errors.php";
-
 class User {
 
     public $id = "";
@@ -16,7 +14,7 @@ class User {
 
     private $table = "user_app";
 
-    public function __construct(string $id) {
+    public function __construct(string $id, bool $by_username = False) {
         /**
          * Connects to the user platform to lookup details or update it
          * 
@@ -24,7 +22,7 @@ class User {
          */
         global $DATABASE;
 
-        $this->id = $id;
+        $search_by = $by_username ? "username" : "id";
 
         $query = "SELECT 
             id, 
@@ -35,10 +33,10 @@ class User {
             email,
             avatar
         FROM {$this->table}
-        WHERE {$this->table}.id = :id";
+        WHERE {$this->table}.{$search_by} = :id";
 
         $DATABASE->query($query, [
-            ":id" => $this->id
+            ":id" => $id
         ]);
 
         $response = $DATABASE->execute();
@@ -51,7 +49,7 @@ class User {
         $results = $DATABASE->fetch();
 
         if (count($results) < 1) {
-            $this->error = Error::$USER_DOES_NOT_EXISTS;
+            $this->error = ErrorMessage::$USER_DOES_NOT_EXISTS;
             return;
         }
 
@@ -62,6 +60,7 @@ class User {
         $this->username = $results["username"];
         $this->avatar = $results["avatar"];
         $this->email = $results["email"];
+        $this->id = $results["id"];
         $this->error = "";
     }
 
@@ -71,7 +70,6 @@ class User {
          * user has in the instance
          */
         global $DATABASE;
-
 
         $query = "UPDATE 
             {$this->table} 

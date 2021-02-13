@@ -1,8 +1,5 @@
 <?php
 
-require "../exceptions/TokenInvalidException.php";
-require "../utils/errors.php";
-
 class JWT {
 
     private static $KID = "";
@@ -80,7 +77,7 @@ class JWT {
         $sign = hash(self::$HASH, "{$token_header}.{$token_body}.{$secret}");
 
         if ( $token_sign !== $sign ) {
-            throw new TokenInvalidException(Error::$TOKEN_INVALID);
+            throw new TokenInvalidException(ErrorMessage::$TOKEN_INVALID);
         }
 
         $token_body = base64_decode($token_body);

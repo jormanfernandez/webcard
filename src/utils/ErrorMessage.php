@@ -3,13 +3,15 @@
 define("CODE_KEY", "errorCode");
 define("MESSAGE_KEY", "errorMessage");
 
-class Error {
+class ErrorMessage {
 
     public static $UNKNOW_ERROR;
     public static $TOKEN_INVALID;
     public static $USER_DOES_NOT_EXISTS;
     public static $TOKEN_EXPIRED;
     public static $URL_NOT_FOUND;
+    public static $INVALID_PARAMETER;
+    public static $INVALID_THEMECARD;
 
     public static function setup() {
         /**
@@ -40,9 +42,19 @@ class Error {
             MESSAGE_KEY => "The direction was not found",
             CODE_KEY => "err005"
         ]);
+
+        self::$INVALID_PARAMETER = json_encode([
+            MESSAGE_KEY => "An invalid parameter was sent",
+            CODE_KEY => "err006"
+        ]);
+
+        self::$INVALID_THEMECARD = json_encode([
+            MESSAGE_KEY => "An invalid theme was sent",
+            CODE_KEY => "err007"
+        ]);
     }
 }
 
-Error::setup();
+ErrorMessage::setup();
 
 ?>
