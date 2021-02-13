@@ -6,7 +6,7 @@ require "../utils/errors.php";
 class Router {
     
     private static $routes = [
-        "/user/info/" => "GetUserInfoResponse"
+        "/api/user/info/" => "GetUserInfoResponse"
     ];
 
     public static function go(string $uid): string { 
