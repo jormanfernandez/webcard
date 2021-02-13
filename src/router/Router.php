@@ -6,7 +6,7 @@ class Router {
         "/api/users/" => [
             "method" => "get",
             "handler" => "GetAllUsersTest",
-            "active" => TRUE
+            "active" => FALSE
         ],
         "/api/user/" => [
             "method" => "get",
@@ -21,6 +21,11 @@ class Router {
         "/api/auth/signup/" => [
             "method" => "post",
             "handler" => "CreateUserResponse",
+            "active" => TRUE
+        ],
+        "/api/auth/login/" => [
+            "method" => "post",
+            "handler" => "LoginUserResponse",
             "active" => TRUE
         ],
     ];

@@ -20,6 +20,7 @@ set_error_handler(function($errno, $errstr, $errfile, $errline ){
     throw new RequestException($message);
 });
 
+JWT::setup($ENV["JWT_KID"], $ENV["JWT_SIGN"]);
 
 $DATABASE = new Database();
 $DATABASE->connect(
@@ -34,15 +35,15 @@ try {
     $token = NULL;
     $uid = NUlL;
 
-    if ($authorization !== NULL && str_starts_with(strtolower($authorization), "Bearer ")) {
+    if ($authorization !== NULL && !str_starts_with(strtolower($authorization), "bearer ")) {
         throw new AuthorizationInvalidException(ErrorMessage::$TOKEN_INVALID);
     }
 
     if ($authorization !== NULL) {
-        $token = ltrim($authorization, "Bearer ");
+        $token = str_replace("Bearer ", "", $authorization);
         $token = JWT::decode($token);
 
-        if (JWT::is_expired($token) || in_array("sub", $token) === FALSE) {
+        if (JWT::is_expired($token)) {
             throw new AuthorizationInvalidException(ErrorMessage::$TOKEN_EXPIRED);
         }
 

@@ -81,7 +81,7 @@ class JWT {
         }
 
         $token_body = base64_decode($token_body);
-        $body = json_decode($token_body);
+        $body = json_decode($token_body, TRUE);
 
         return $body;
     }
@@ -97,14 +97,10 @@ class JWT {
 
         $is_expired = TRUE;
 
-        if (in_array("exp", $body) === FALSE) {
-            return $is_expired;
-        }
-
         $date = date_create();
         $date = intval(date_format($date, "U"));
 
-        if ($date > $body["exp"]) {
+        if ($date < $body["exp"]) {
             $is_expired = FALSE;
         }
 

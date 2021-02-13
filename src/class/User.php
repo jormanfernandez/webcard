@@ -33,14 +33,15 @@ class User {
         $search_by = $by_username ? "username" : "id";
 
         $query = "SELECT 
-            id, 
-            username, 
             created_datetime,
             updated_datetime,
             first_name,
             last_name,
+            username,
+            avatar,
+            validated,
             email,
-            avatar
+            id
         FROM {$this->table}
         WHERE {$this->table}.{$search_by} = :id";
 
@@ -231,7 +232,7 @@ class User {
         )";
 
         $params = [
-            ":psw" => $user->hash_password($password),
+            ":psw" => User::hash_password($password),
             ":created_datetime" => $user->created_datetime,
             ":updated_datetime" => $user->updated_datetime,
             ":first_name" => $user->first_name,
@@ -253,7 +254,64 @@ class User {
         return $user;
     }
 
-    public function hash_password(string $password): string {
+    public static function login(array $request): User {
+        /**
+         * Checking the password received in the request, looks up a user to validate them and return it
+         * 
+         * @param array $request
+         * 
+         * @return User
+         */
+        
+        global $DATABASE;
+
+        $username = isset($request["username"]) && is_string($request["username"]) ? $request["username"] : NULL;
+        $password = isset($request["password"]) && is_string($request["password"]) ? $request["password"] : NULL;
+
+        if (empty($username) || empty($password)) {
+            throw new RequestException(str_replace("{parameter}", "username or password", ErrorMessage::$INVALID_PARAMETER));
+        }
+
+        $table = self::$TABLE;
+
+        $command = "SELECT 
+            id
+        FROM {$table} 
+        WHERE 
+            username = :username 
+        AND 
+            psw = :psw";
+        
+        $password = User::hash_password($password);
+
+        $DATABASE->query($command, [
+            ":psw" => $password,
+            ":username" => $username
+        ]);
+
+        $response = $DATABASE->execute();
+
+        if (!$response["success"]) {
+            throw new RequestException($response["message"]);
+        }
+
+        $results = $DATABASE->fetch();
+
+        if (empty($results) || count($results) < 1) {
+            throw new RequestException(ErrorMessage::$INVALID_LOGIN);
+        }
+
+        $uid = $results[0]["id"];
+        
+        $user = new User($uid);
+        if (!empty($user->error)) {
+            throw new RequestException($user->error);
+        }
+        
+        return $user;
+    }
+
+    public static function hash_password(string $password): string {
         /**
          * Hash the password so its undescifrable
          * 

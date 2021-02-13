@@ -2,7 +2,7 @@
 
 # Configurations
 require "./src/config.php";
-require "./src/utils/between.php";
+require "./src/utils/utils.php";
 require "./src/utils/ErrorMessage.php";
 
 # Database
@@ -25,6 +25,7 @@ require "./src/router/responses/CreateUserResponse.php";
 require "./src/router/responses/GetUserInfoResponse.php";
 require "./src/router/responses/GetAllUsersTest.php";
 require "./src/router/responses/LoggedUserInfoResponse.php";
+require "./src/router/responses/LoginUserResponse.php";
 require "./src/router/Router.php";
 
 ?>
