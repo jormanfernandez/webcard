@@ -51,7 +51,7 @@ class User {
         $response = $DATABASE->execute();
 
         if ( $response["success"] === FALSE) {
-            $this->error = $response["data"];
+            $this->error = $response["message"];
             return;
         }
 
@@ -95,7 +95,7 @@ class User {
         WHERE {$this->table}.id = :id";
 
         $date = date_create();
-        $date = date_format($date, "U");
+        $date = intval(date_format($date, "U"));
 
         $this->updated_datetime = $date;
 
@@ -123,7 +123,8 @@ class User {
          */
 
         $info = [
-            "created_datetime" => $this->created_datetime,
+            "created_datetime" => intval($this->created_datetime),
+            "updated_datetime" => intval($this->updated_datetime),
             "first_name" => $this->first_name,
             "validated" => $this->validated,
             "last_name" => $this->last_name,
@@ -153,7 +154,7 @@ class User {
         $response = $DATABASE->execute();
 
         if ( $response["success"] === FALSE ) {
-            throw new RequestException($response["data"]);
+            throw new RequestException($response["message"]);
         }
 
         $rows = $DATABASE->fetch();
@@ -181,44 +182,91 @@ class User {
         $user = new User(NULL);
 
         foreach($parameters as $key => $value) {
-            $user->{$key} = $value;
+            if (property_exists($user, $key)) {
+                $user->{$key} = $value;
+            }
         }
 
         $date = date_create();
-        $date = date_format($date, "U");
+        $date = intval(date_format($date, "U"));
 
         $user->created_datetime = $date;
         $user->updated_datetime = $date;
-        $user->validated = FALSE;
-        $table = self::$TABLE;
-        
-        $command = "INSERT INTO {$table} (";
-        $values = "VALUES (";
-        
-        $serialized = $user->serialize();
-        $params = [];
+        $user->validated = 0;
 
-        foreach($serialized as $field => $value) {
-            $param = ":{$field}";
-            $command = "{$command}{$field},";
-            $values = "{$values}:{$param},";
+        $password = isset($parameters["password"]) && is_string($parameters["password"]) ? $parameters["password"] : NULL;
 
-            $params[$param] = $value;
+        if (empty($password) || !between(strlen($password), 8, 20)) {
+            throw new RequestException(str_replace("{parameter}", "password", ErrorMessage::$INVALID_PARAMETER));
+        }
+        
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+            throw new RequestException(str_replace("{parameter}", "email", ErrorMessage::$INVALID_PARAMETER));
         }
 
-        $command = rtrim($command, ",");
-        $values = rtrim($values, ",");
+        $table = self::$TABLE;
+        
+        $command = "INSERT INTO {$table} (
+            psw,
+            created_datetime,
+            updated_datetime,
+            first_name,
+            validated,
+            last_name,
+            username,
+            avatar,
+            email,
+            id
+        ) VALUES (
+            :psw,
+            :created_datetime,
+            :updated_datetime,
+            :first_name,
+            :validated,
+            :last_name,
+            :username,
+            :avatar,
+            :email,
+            :id
+        )";
 
-        $command = "{$command} {$values}";
+        $params = [
+            ":psw" => $user->hash_password($password),
+            ":created_datetime" => $user->created_datetime,
+            ":updated_datetime" => $user->updated_datetime,
+            ":first_name" => $user->first_name,
+            ":validated" => $user->validated,
+            ":last_name" => $user->last_name,
+            ":username" => $user->username,
+            ":avatar" => $user->avatar,
+            ":email" => $user->email,
+            ":id" => $user->id
+        ];
 
         $DATABASE->query($command, $params);
         $response = $DATABASE->execute();
 
         if (!$response["success"]) {
-            throw new RequestException($response["data"]);
+            throw new RequestException($response["message"]);
         }
 
-        return $serialized;
+        return $user;
+    }
+
+    public function hash_password(string $password): string {
+        /**
+         * Hash the password so its undescifrable
+         * 
+         * @param string $password
+         * 
+         * @return string
+         */
+        global $ENV;
+
+        $hash = "{$password}.{$ENV['PHASH']}";
+        $hash = hash("sha256", $hash);
+
+        return $hash;
     }
 
 }

@@ -20,7 +20,7 @@ class ErrorMessage {
          */
 
         self::$UNKNOW_ERROR = json_encode([
-            MESSAGE_KEY => "Unknown Error",
+            MESSAGE_KEY => "Unknown Error: {error_message}",
             CODE_KEY => "err001"
         ]);
     
@@ -45,7 +45,7 @@ class ErrorMessage {
         ]);
 
         self::$INVALID_PARAMETER = json_encode([
-            MESSAGE_KEY => "An invalid parameter was sent",
+            MESSAGE_KEY => "An invalid parameter was sent: {parameter}",
             CODE_KEY => "err006"
         ]);
 

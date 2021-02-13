@@ -42,9 +42,9 @@ class JWT {
         
         $date = date_create();
 
-        $body["iat"] = date_format($date, "U");
+        $body["iat"] = intval(date_format($date, "U"));
         $date = date_add($date, date_interval_create_from_date_string($exp));
-        $body["exp"] = date_format($date, "U");
+        $body["exp"] = intval(date_format($date, "U"));
         $body["iss"] = $ENV["DOMAIN"];
         
         $body = json_encode($body);
@@ -102,7 +102,7 @@ class JWT {
         }
 
         $date = date_create();
-        $date = date_format($date, "U");
+        $date = intval(date_format($date, "U"));
 
         if ($date > $body["exp"]) {
             $is_expired = FALSE;

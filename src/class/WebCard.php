@@ -44,7 +44,7 @@ class WebCard {
         }
 
         $date = date_create();
-        $date = date_format($date, "U");
+        $date = intval(date_format($date, "U"));
 
         $webcard->created_datetime = $date;
         $webcard->updated_datetime = $date;
@@ -120,7 +120,7 @@ class WebCard {
         $response = $DATABASE->execute();
 
         if ($response["success"] === FALSE) {
-            $this->error = $response["data"];
+            $this->error = $response["message"];
         }
     }
 }

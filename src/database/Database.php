@@ -34,6 +34,8 @@ class Database {
             $this->username, 
             $this->password
         );
+
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
     }
 
@@ -72,17 +74,29 @@ class Database {
             "success" => FALSE,
             "message" => ""
         ];
-        
+
         try {
 
             $this->stm->execute();
-            $response["success"] = True;
+            $response["success"] = TRUE;
 
-        } catch ( Exception $e ) {
-            $response["message"] = $e->getMessage();
+        } catch ( PDOException $e ) {
+            $message = $e->getMessage();
+            $message = explode(":", $message, 3);
+            $message = trim($message[2]);
+
+            $response["message"] = $message;
         }
 
         return $response;
+    }
+
+    public function commit() {
+        /**
+         * Handles a commit change to the database
+         */
+
+         $this->conn->commit();
     }
 
     public function fetch(): array {
@@ -106,7 +120,30 @@ class Database {
          */
 
         foreach($params as $key => $value) {
-            $this->stm->bindParam($key, $value);
+
+            $data_type = PDO::PARAM_STR;
+
+            $param_type = gettype($value);
+            
+            switch($param_type) {
+                case "integer":
+                case "double":
+                    $data_type = PDO::PARAM_INT;
+                break;
+                
+                case "boolean":
+                    $data_type = PDO::PARAM_BOOL;
+                break;
+
+                case "NULL":
+                    $data_type = PDO::PARAM_NULL;
+                break;
+
+                default:
+                    $data_type = PDO::PARAM_STR;
+            }
+
+            $this->stm->bindValue($key, $value, $data_type);
         }
     }
 

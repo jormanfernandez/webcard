@@ -2,7 +2,7 @@
 
 class CreateUserResponse extends Response {
 
-    protected $is_authenticated = TRUE;
+    protected $is_authenticated = FALSE;
 
     public function execute(array $url_parameters): array { 
 
