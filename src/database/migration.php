@@ -1,6 +1,6 @@
 <?php
 
-require_once "../class/0_Database.php";
+require_once "./Database.php";
 require_once "../config.php";
 
 $USERS = [
@@ -61,7 +61,6 @@ $LINKS = [
     ],
     "characterSet" => "utf8"
 ];
-
 
 $TABLES = [
     $USERS,
