@@ -13,6 +13,8 @@ class User {
     public $error = "";
 
     private $table = "user_app";
+    private static $TABLE = "user_app";
+
 
     public function __construct(string $id, bool $by_username = False) {
         /**
@@ -95,6 +97,46 @@ class User {
         $response = $DATABASE->execute();
 
         return $response;
+    }
+
+    public static function get_all(): array {
+        /**
+         * As test purpose, we select all the users in the database
+         */
+        global $DATABASE;
+
+        $table = self::$TABLE;
+
+        $query = "SELECT 
+            id
+        FROM {$table}";
+
+        $DATABASE->query($query);
+        
+        $response = $DATABASE->execute();
+
+        if ( $response["success"] === FALSE ) {
+            throw new RequestException($response["data"]);
+        }
+
+        $rows = $DATABASE->fetch();
+        $users = [];
+
+        foreach($rows as $row) {
+            $user = new User($row["id"]);
+            $user = [
+                "created_datetime" => $user->created_datetime,
+                "first_name" => $user->first_name,
+                "last_name" => $user->last_name,
+                "username" => $user->username,
+                "avatar" => $user->avatar,
+                "email" => $user->email,
+                "id" => $user->id
+            ];
+            array_push($users, $user);
+        }
+
+        return $users;
     }
 }
 

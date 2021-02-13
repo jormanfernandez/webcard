@@ -3,14 +3,26 @@
 class Router {
     
     private static $routes = [
+        "/api/users/" => [
+            "method" => "get",
+            "handler" => "GetAllUsersTest",
+            "active" => TRUE
+        ],
         "/api/user/" => [
             "method" => "get",
-            "handler" => "LoggedUserInfoResponse"
+            "handler" => "LoggedUserInfoResponse",
+            "active" => TRUE
         ],
         "/api/user/(?P<username>[^/]+)/" => [
             "method" => "get",
-            "handler" => "GetUserInfoResponse"
-        ]
+            "handler" => "GetUserInfoResponse",
+            "active" => TRUE
+        ],
+        "/api/card/create/" => [
+            "method" => "post",
+            "handler" => "CreateWebCardResponse",
+            "active" => TRUE
+        ],
     ];
 
     public static function go(?string $uid): string { 
@@ -27,7 +39,7 @@ class Router {
 
         foreach(self::$routes as $route => $class) {
 
-            if (strtolower($_SERVER['REQUEST_METHOD']) !== $class["method"]) {
+            if (!$class["active"] || strtolower($_SERVER['REQUEST_METHOD']) !== $class["method"]) {
                 continue;
             }
 
@@ -51,6 +63,7 @@ class Router {
         }
 
         $handler = new $handler();
+        $handler->method = strtolower($_SERVER['REQUEST_METHOD']);
 
         return $handler->process($uid, $url_parameters);
     }

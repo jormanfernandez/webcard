@@ -22,6 +22,7 @@ require "./src/exceptions/RequestException.php";
 require "./src/router/Response.php";
 require "./src/router/responses/CreateWebCardResponse.php";
 require "./src/router/responses/GetUserInfoResponse.php";
+require "./src/router/responses/GetAllUsersTest.php";
 require "./src/router/responses/LoggedUserInfoResponse.php";
 require "./src/router/Router.php";
 

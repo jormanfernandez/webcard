@@ -4,7 +4,7 @@ class LoggedUserInfoResponse extends Response {
 
     protected $is_authenticated = TRUE;
 
-    public function execute(array $request, array $url_parameters): array { 
+    public function execute(array $url_parameters): array { 
         return [
             "created_datetime" => $this->user->created_datetime,
             "first_name" => $this->user->first_name,

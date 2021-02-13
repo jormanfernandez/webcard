@@ -12,6 +12,7 @@ class ErrorMessage {
     public static $URL_NOT_FOUND;
     public static $INVALID_PARAMETER;
     public static $INVALID_THEMECARD;
+    public static $INVALID_METHOD;
 
     public static function setup() {
         /**
@@ -51,6 +52,11 @@ class ErrorMessage {
         self::$INVALID_THEMECARD = json_encode([
             MESSAGE_KEY => "An invalid theme was sent",
             CODE_KEY => "err007"
+        ]);
+
+        self::$INVALID_METHOD = json_encode([
+            MESSAGE_KEY => "The method used is invalid",
+            CODE_KEY => "err008"
         ]);
     }
 }

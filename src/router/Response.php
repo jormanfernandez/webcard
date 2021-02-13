@@ -4,6 +4,8 @@ class Response {
     
     protected $is_authenticated = FALSE;
     protected $user = NULL;
+    protected $request = [];
+    public $method = NULL;
 
     public function process(?string $uid, array $url_parameters = []): string {
         /**
@@ -17,22 +19,45 @@ class Response {
             $this->validate_user($uid);
         }
 
-        $request = $this->get_params();
-        $response = $this->execute($request, $url_parameters);
+        $this->get_request();
+        $response = $this->execute($url_parameters);
 
         return json_encode($response);
     }
-
-    public function get_params() {
+    
+    public function get_request() {
         /**
          * Handles the get of the params for the specific request
-         * 
-         * @return array
          */
-        return [];
+
+        
+        $request = [];
+
+        switch($this->method) {
+            case "get":
+                $request = empty($_GET) ? [] : $_GET;
+            break;
+            
+            case "post":
+                $request = empty($_POST) ? json_decode(file_get_contents('php://input'), true) : $_POST;
+            break;
+
+            case "put":
+                $request = json_decode(file_get_contents('php://input'), true);
+            break;
+
+            case "delete":
+                $request = empty($_GET) ? [] : $_GET;
+            break;
+
+            default:
+                $request = [];
+        }
+
+        $this->request = $request;
     }
 
-    public function execute(array $request, array $url_parameters): array {
+    public function execute(array $url_parameters): array {
         /**
          * Execute a request in the other services
          * 
@@ -53,13 +78,13 @@ class Response {
          */
 
         if(empty($uid))  {
-            throw new AuthorizationInvalidException(ErrorMessage::$USER_DOES_NOT_EXISTS);
+            throw new AuthorizationInvalidException(ErrorMessage::$TOKEN_EXPIRED);
         }
 
         $this->user = new User($uid);
 
         if (empty($this->user->error) === FALSE) {
-            throw new AuthorizationInvalidException(ErrorMessage::$USER_DOES_NOT_EXISTS);
+            throw new AuthorizationInvalidException(ErrorMessage::$TOKEN_INVALID);
         }
     }
 }

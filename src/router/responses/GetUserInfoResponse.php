@@ -4,7 +4,7 @@ class GetUserInfoResponse extends Response {
 
     protected $is_authenticated = TRUE;
 
-    public function execute(array $request, array $url_parameters): array { 
+    public function execute(array $url_parameters): array { 
 
         $username = $url_parameters["username"];
         $user = new User($username, True);

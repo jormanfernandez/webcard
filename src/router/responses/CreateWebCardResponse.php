@@ -4,26 +4,18 @@ class CreateWebCardResponse extends Response {
 
     protected $is_authenticated = TRUE;
 
-    public function get_params(): array {
-        /**
-         * Search for the params
-         * 
-         * @param title
-         * @param subtitle
-         */
+    public function execute(array $url_parameters): array { 
 
         $default_title = "My WebCard";
         $default_subtitle = "";
 
+        $request = $this->request;
+
         $params = [
-            "title" => $_POST["title"] && is_string($_POST["title"]) ? $_POST["title"] : $default_title,
-            "subtitle" => $_POST["subtitle"] && is_string($_POST["subtitle"]) ? $_POST["subtitle"] : $default_subtitle,
+            "title" => $request["title"] && is_string($request["title"]) ? $request["title"] : $default_title,
+            "subtitle" => $request["subtitle"] && is_string($request["subtitle"]) ? $request["subtitle"] : $default_subtitle,
         ];
-
-        return $params;
-    }
-
-    public function execute(array $request, array $url_parameters): array { 
+        
         return [];
     }
 }
