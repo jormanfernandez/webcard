@@ -36,7 +36,7 @@ class Response {
         return [];
     }
 
-    private function execute(array $request, array $url_parameters): array {
+    public function execute(array $request, array $url_parameters): array {
         /**
          * Execute a request in the other services
          * 
