@@ -25,9 +25,16 @@ $WEBCARDS = [
         "id VARCHAR(13) PRIMARY KEY,",
         "created_datetime INT(10) NOT NULL,",
         "is_active TINYINT(1) DEFAULT 1,",
+        "theme VARCHAR(10) DEFAULT 'normal',",
+        "show_share TINYINT(1) DEFAULT 1,",
+        "auto_play TINYINT(1) DEFAULT 1,",
+        "opens_new_tab TINYINT(1) DEFAULT 1,",
+        "public TINYINT(1) DEFAULT 1,",
         "owner_id VARCHAR(13) NOT NULL,",
         "title VARCHAR(300) NOT NULL,",
+        "subtitle VARCHAR(300) NOT NULL,",
         "preview VARCHAR(300) NOT NULL,",
+        "preview_on_platform TINYINT(1) DEFAULT 1,",
     ],
     "fks" => [
         "fk_owner_webcard" => [
@@ -46,10 +53,10 @@ $LINKS = [
         "id VARCHAR(13) PRIMARY KEY,",
         "created_datetime INT(10) NOT NULL,",
         "webcard_id VARCHAR(13) NOT NULL,",
-        "url VARCHAR(300) NOT NULL,",
-        "icon VARCHAR(300) NULL,",
+        "link_type VARCHAR(3) NOT NULL DEFAULT 'red',",
         "title VARCHAR(30) NULL,",
         "button VARCHAR(30) NOT NULL DEFAULT 'View',",
+        "active TINYINT DEFAULT 1,",
     ],
     "fks" => [
         "fk_link_webcard" => [
