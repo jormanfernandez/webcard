@@ -7,7 +7,7 @@ $ENV = [
     "PHASH" => "LCrw5t09orVOwmlC3fcNCXbPiCXbPiDuCJZDuCJZ6dpjeoC5pPW8neJZciHvxgh9a0n1oT",
     "JWT_SIGN" => "ruSHIXJkz5GZSRCqU1QouNoq3wfXzpwRMQ7ROfZUCd7s1LqN8udJNJxW67yC8VCgr66vTIlGcQpmDg66",
     "JWT_KID" => "x2KJJ6G1DbK7TKFdZoPY",
-    "DOMAIN" => "",
+    "DOMAIN" => "localhost",
     "debug" => TRUE
 ];
 
