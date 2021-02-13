@@ -30,6 +30,8 @@ class Response {
     public function get_params() {
         /**
          * Handles the get of the params for the specific request
+         * 
+         * @return array
          */
         return [];
     }
@@ -38,7 +40,10 @@ class Response {
         /**
          * Execute a request in the other services
          * 
-         * @param array
+         * @param array $request parameters processed for the request
+         * @param array $url_parameters parameters extracted from the url
+         * 
+         * @return array 
          */
         return [];
     }
