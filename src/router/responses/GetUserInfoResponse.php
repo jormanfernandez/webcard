@@ -1,0 +1,20 @@
+<?php
+require "../Response.php";
+
+class GetUserInfoResponse extends Response {
+
+    protected $is_authenticated = TRUE;
+
+    private function execute(array $request, array $url_parameters): array { 
+        return [
+            "created_datetime" => $this->user->created_datetime,
+            "first_name" => $this->user->first_name,
+            "last_name" => $this->user->last_name,
+            "username" => $this->user->username,
+            "avatar" => $this->user->avatar,
+            "email" => $this->user->email,
+            "id" => $this->user->id
+        ];
+    }
+}
+?>

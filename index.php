@@ -6,6 +6,7 @@ require "./src/database/Database.php";
 require "./src/class/JWT.php";
 require "./src/exceptions/AuthorizationInvalidException.php";
 require "./src/utils/errors.php";
+require "./src/router/Router.php";
 
 $DATABASE = new Database();
 $DATABASE->connect(
@@ -18,6 +19,7 @@ try {
 
     $Authorization = in_array("HTTP_AUTHORIZATION", $_SERVER) ? $_SERVER["HTTP_AUTHORIZATION"] : NULL;
     $token = NULL;
+    $uid = NULL;
 
     if ($Authorization !== NULL && str_starts_with(strtolower($Authorization), "Bearer ")) {
         throw new AuthorizationInvalidException(Error::$TOKEN_INVALID);
@@ -30,7 +32,11 @@ try {
         if (JWT::is_expired($token) || in_array("sub", $token) === FALSE) {
             throw new AuthorizationInvalidException(Error::$TOKEN_EXPIRED);
         }
+
+        $uid = $token["sub"];
     }
+
+    echo Router::go($uid);
 
 } catch(Exception $e) {
     $message = $e->getMessage();
