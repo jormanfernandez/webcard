@@ -9,7 +9,7 @@ class GetUserInfoResponse extends Response {
         $username = $url_parameters["username"];
         $user = new User($username, True);
 
-        if (empty($user->error) !== NULL) {
+        if (!empty($user->error)) {
             throw new RequestException($user->error);
         }
 

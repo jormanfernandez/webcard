@@ -8,7 +8,7 @@ class Router {
             "handler" => "GetAllUsersTest",
             "active" => FALSE
         ],
-        "/api/user/" => [
+        "/api/me/" => [
             "method" => "get",
             "handler" => "LoggedUserInfoResponse",
             "active" => TRUE

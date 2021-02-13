@@ -83,7 +83,7 @@ class Response {
 
         $this->user = new User($uid);
 
-        if (empty($this->user->error) === FALSE) {
+        if (!empty($this->user->error)) {
             throw new AuthorizationInvalidException(ErrorMessage::$TOKEN_INVALID);
         }
     }
