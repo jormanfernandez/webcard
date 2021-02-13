@@ -85,9 +85,8 @@ class User {
             updated_datetime = :updated_datetime,
             first_name = :first_name,
             last_name = :last_name,
-            username = :username,
-            avatar = :avatar,
-            email = :email
+            validated = :validated,
+            avatar = :avatar
         WHERE {$this->table}.id = :id";
 
         $date = date_create();
@@ -100,9 +99,8 @@ class User {
             ":updated_datetime" => $this->updated_datetime,
             ":first_name" => $this->first_name,
             ":last_name" => $this->last_name,
-            ":username" => $this->username,
+            ":validated" => $this->validated ? 1 : 0,
             ":avatar" => $this->avatar,
-            ":email" => $this->email,
             ":id" => $this->id
         ]);
 

@@ -1,4 +1,7 @@
 <?php
+session_name("UWS");
+session_start();
+
 header ("accept: application/json", true);
 header ("content-type: application/json", true);
 
@@ -20,7 +23,8 @@ set_error_handler(function($errno, $errstr, $errfile, $errline ){
     throw new RequestException($message);
 });
 
-JWT::setup($ENV["JWT_KID"], $ENV["JWT_SIGN"]);
+# TODO: are we going with cookies or sessions?
+# JWT::setup($ENV["JWT_KID"], $ENV["JWT_SIGN"]);
 
 $DATABASE = new Database();
 $DATABASE->connect(
@@ -31,6 +35,9 @@ $DATABASE->connect(
 
 try {
 
+    # TODO: are we going with cookies or sessions?
+
+    /*
     $authorization = isset($_SERVER["HTTP_AUTHORIZATION"]) ? $_SERVER["HTTP_AUTHORIZATION"] : NULL;
     $token = NULL;
     $uid = NUlL;
@@ -49,6 +56,9 @@ try {
 
         $uid = $token["sub"];
     }
+    */
+
+    $uid = isset($_SESSION["uwi"]) ? $_SESSION["uwi"] : NULL;
 
     http_response_code(200);
     echo Router::go($uid);
