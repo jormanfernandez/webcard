@@ -302,7 +302,7 @@ class User {
          */
         global $ENV;
 
-        $hash = "{$password}.${$username}.{$ENV['PHASH']}";
+        $hash = "{$password}.{$username}.{$ENV['PHASH']}";
         $hash = hash("sha256", $hash);
 
         return $hash;
