@@ -1,12 +1,14 @@
 <?php
 
+require "../router/responses/LoggedUserInfoResponse.php";
 require "../router/responses/GetUserInfoResponse.php";
 require "../utils/errors.php";
 
 class Router {
     
     private static $routes = [
-        "/api/user/info/" => "GetUserInfoResponse"
+        "/api/user/info/" => "LoggedUserInfoResponse",
+        "/api/user/(?P<pk>[^/]+)/" => "GetUserInfoResponse"
     ];
 
     public static function go(string $uid): string { 
