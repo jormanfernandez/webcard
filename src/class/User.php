@@ -49,12 +49,7 @@ class User {
             ":id" => $id
         ]);
 
-        $response = $DATABASE->execute();
-
-        if ( $response["success"] === FALSE) {
-            $this->error = $response["message"];
-            return;
-        }
+        $DATABASE->execute();
 
         $results = $DATABASE->fetch();
 
@@ -76,7 +71,7 @@ class User {
         $this->error = "";
     }
 
-    public function update(): array {
+    public function update(): User {
         /**
          * With the id selected, will change the other values that the 
          * user has in the instance
@@ -111,9 +106,9 @@ class User {
             ":id" => $this->id
         ]);
 
-        $response = $DATABASE->execute();
+        $DATABASE->execute();
 
-        return $response;
+        return $this;
     }
 
     public function serialize(): array {
@@ -152,11 +147,7 @@ class User {
 
         $DATABASE->query($query);
         
-        $response = $DATABASE->execute();
-
-        if ( $response["success"] === FALSE ) {
-            throw new RequestException($response["message"]);
-        }
+        $DATABASE->execute();
 
         $rows = $DATABASE->fetch();
         $users = [];
@@ -245,11 +236,7 @@ class User {
         ];
 
         $DATABASE->query($command, $params);
-        $response = $DATABASE->execute();
-
-        if (!$response["success"]) {
-            throw new RequestException($response["message"]);
-        }
+        $DATABASE->execute();
 
         return $user;
     }
@@ -289,11 +276,7 @@ class User {
             ":username" => $username
         ]);
 
-        $response = $DATABASE->execute();
-
-        if (!$response["success"]) {
-            throw new RequestException($response["message"]);
-        }
+        $DATABASE->execute();
 
         $results = $DATABASE->fetch();
 

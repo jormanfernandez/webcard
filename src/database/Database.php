@@ -63,17 +63,11 @@ class Database {
         return $this;
     }
 
-    public function execute(): array {
+    public function execute(): void {
         /**
          * Executes a query stored in the prepared statement
-         * 
-         * @return array bool, string
          */
 
-        $response = [
-            "success" => FALSE,
-            "message" => ""
-        ];
 
         try {
 
@@ -82,13 +76,8 @@ class Database {
 
         } catch ( PDOException $e ) {
             $message = $e->getMessage();
-            $message = explode(":", $message, 3);
-            $message = trim($message[2]);
-
-            $response["message"] = $message;
+            throw new RequestException($message);
         }
-
-        return $response;
     }
 
     public function commit() {

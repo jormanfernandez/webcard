@@ -117,11 +117,8 @@ class WebCard {
             ":preview_on_platform" => $this->preview_on_platform ? 1 : 0
         ]);
 
-        $response = $DATABASE->execute();
+        $DATABASE->execute();
 
-        if ($response["success"] === FALSE) {
-            $this->error = $response["message"];
-        }
     }
 }
 
