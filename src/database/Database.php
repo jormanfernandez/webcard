@@ -9,7 +9,7 @@ class Database {
 
     private $stm;
 
-    function connect(string $conn_string, string $username, string $password): void {
+    public function connect(string $conn_string, string $username, string $password): void {
         /**
          * Connects to the database to use in the environment
          * 
@@ -24,7 +24,7 @@ class Database {
         $this->createPDO();
     }
     
-    function createPDO(): void {
+    public function createPDO(): void {
         /**
          * With the inner values set, we create the connection to the pdo instance
          */
@@ -37,7 +37,7 @@ class Database {
         
     }
 
-    function query(string $query, array $params = []): Database {
+    public function query(string $query, array $params = []): Database {
         /**
          * Executes a query in the database depending on the respective parameters received
          * 
@@ -61,7 +61,7 @@ class Database {
         return $this;
     }
 
-    function execute(): array {
+    public function execute(): array {
         /**
          * Executes a query stored in the prepared statement
          * 
@@ -85,7 +85,7 @@ class Database {
         return $response;
     }
 
-    function fetch(): array {
+    public function fetch(): array {
         /**
          * From the stm prepared statement, executes the function fetchAll
          * to return any value stored from the previous executed query
@@ -96,7 +96,7 @@ class Database {
          return $this->stm->fetchAll();
     }
 
-    function bindParameters($params): void {
+    public function bindParameters($params): void {
         /**
          * Using the bindParam feature of prepared statements 
          * from pdo, we attach the key value pair from params
@@ -110,7 +110,7 @@ class Database {
         }
     }
 
-    function close(): void {
+    public function close(): void {
         /**
          * We close the connection to the database by destroying the 
          * pdo instance
