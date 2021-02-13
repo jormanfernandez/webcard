@@ -18,9 +18,9 @@ class Router {
             "handler" => "GetUserInfoResponse",
             "active" => TRUE
         ],
-        "/api/card/create/" => [
+        "/api/auth/signup/" => [
             "method" => "post",
-            "handler" => "CreateWebCardResponse",
+            "handler" => "CreateUserResponse",
             "active" => TRUE
         ],
     ];

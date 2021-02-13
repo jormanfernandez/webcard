@@ -39,14 +39,17 @@ try {
         $uid = $token["sub"];
     }
 
+    http_response_code(200);
     echo Router::go($uid);
 
 } catch(Exception $e) {
     $message = $e->getMessage();
 
     if (strpos(CODE_KEY, $message) === NULL) {
+        http_response_code(500);
         echo ErrorMessage::$UNKNOW_ERROR;
     } else {
+        http_response_code(400);
         echo $message;
     }
 }

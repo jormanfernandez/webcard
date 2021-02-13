@@ -5,6 +5,7 @@ class User {
     public $id = "";
     public $username = "";
     public $created_datetime = "";
+    public $updated_datetime = "";
     public $first_name = "";
     public $last_name = "";
     public $email = "";
@@ -35,6 +36,7 @@ class User {
             id, 
             username, 
             created_datetime,
+            updated_datetime,
             first_name,
             last_name,
             email,
@@ -62,6 +64,7 @@ class User {
 
         $results = $results[0];
         $this->created_datetime = $results["created_datetime"];
+        $this->updated_datetime = $results["updated_datetime"];
         $this->first_name = $results["first_name"];
         $this->last_name = $results["last_name"];
         $this->username = $results["username"];
@@ -83,6 +86,7 @@ class User {
             {$this->table} 
         SET 
             created_datetime = :created_datetime,
+            updated_datetime = :updated_datetime,
             first_name = :first_name,
             last_name = :last_name,
             username = :username,
@@ -90,8 +94,14 @@ class User {
             email = :email
         WHERE {$this->table}.id = :id";
 
+        $date = date_create();
+        $date = date_format($date, "U");
+
+        $this->updated_datetime = $date;
+
         $DATABASE->query($query, [
             ":created_datetime" => $this->created_datetime,
+            ":updated_datetime" => $this->updated_datetime,
             ":first_name" => $this->first_name,
             ":last_name" => $this->last_name,
             ":username" => $this->username,
@@ -115,10 +125,10 @@ class User {
         $info = [
             "created_datetime" => $this->created_datetime,
             "first_name" => $this->first_name,
+            "validated" => $this->validated,
             "last_name" => $this->last_name,
             "username" => $this->username,
             "avatar" => $this->avatar,
-            "validated" => $this->validated,
             "email" => $this->email,
             "id" => $this->id
         ];
@@ -165,12 +175,50 @@ class User {
          * 
          * @return User
          */
+        
+        global $DATABASE;
 
         $user = new User(NULL);
 
+        foreach($parameters as $key => $value) {
+            $user->{$key} = $value;
+        }
 
+        $date = date_create();
+        $date = date_format($date, "U");
 
-        return $user;
+        $user->created_datetime = $date;
+        $user->updated_datetime = $date;
+        $user->validated = FALSE;
+        $table = self::$TABLE;
+        
+        $command = "INSERT INTO {$table} (";
+        $values = "VALUES (";
+        
+        $serialized = $user->serialize();
+        $params = [];
+
+        foreach($serialized as $field => $value) {
+            $param = ":{$field}";
+            $command = "{$command}{$field},";
+            $values = "{$values}:{$param},";
+
+            $params[$param] = $value;
+        }
+
+        $command = rtrim($command, ",");
+        $values = rtrim($values, ",");
+
+        $command = "{$command} {$values}";
+
+        $DATABASE->query($command, $params);
+        $response = $DATABASE->execute();
+
+        if (!$response["success"]) {
+            throw new RequestException($response["data"]);
+        }
+
+        return $serialized;
     }
 
 }

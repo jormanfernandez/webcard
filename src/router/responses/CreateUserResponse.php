@@ -7,11 +7,10 @@ class CreateUserResponse extends Response {
     public function execute(array $url_parameters): array { 
 
         $request = $this->request;
-        $params = [];
 
-        
-        
-        return [];
+        $request["id"] = uniqid();
+        $user = User::create($request);
+        return $user->serialize();
     }
 }
 
