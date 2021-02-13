@@ -3,7 +3,7 @@
 class Router {
     
     private static $routes = [
-        "/api/user/info/" => [
+        "/api/user/" => [
             "method" => "get",
             "handler" => "LoggedUserInfoResponse"
         ],

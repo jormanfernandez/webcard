@@ -5,7 +5,7 @@ class Response {
     protected $is_authenticated = FALSE;
     protected $user = NULL;
 
-    public function process(string $uid, array $url_parameters = []): string {
+    public function process(?string $uid, array $url_parameters = []): string {
         /**
          * Abstract service to use in the different response types. Validating if the user needs to be authenticated
          * and handling the request to process with the inner method
@@ -44,13 +44,17 @@ class Response {
         return [];
     }
 
-    private function validate_user(string $uid): void {
+    private function validate_user(?string $uid): void {
         /**
          * For the response, checks out the user id and add it to the instance
          * attribute, else throws an exception
          * 
          * @param string $uid
          */
+
+        if(empty($uid))  {
+            throw new AuthorizationInvalidException(ErrorMessage::$USER_DOES_NOT_EXISTS);
+        }
 
         $this->user = new User($uid);
 
