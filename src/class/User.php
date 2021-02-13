@@ -223,7 +223,7 @@ class User {
         )";
 
         $params = [
-            ":psw" => User::hash_password($password),
+            ":psw" => User::hash_password($password, $user->username),
             ":created_datetime" => $user->created_datetime,
             ":updated_datetime" => $user->updated_datetime,
             ":first_name" => $user->first_name,
@@ -269,7 +269,7 @@ class User {
         AND 
             psw = :psw";
         
-        $password = User::hash_password($password);
+        $password = User::hash_password($password, $username);
 
         $DATABASE->query($command, [
             ":psw" => $password,
@@ -294,7 +294,7 @@ class User {
         return $user;
     }
 
-    public static function hash_password(string $password): string {
+    public static function hash_password(string $password, string $username): string {
         /**
          * Hash the password so its undescifrable
          * 
@@ -304,7 +304,7 @@ class User {
          */
         global $ENV;
 
-        $hash = "{$password}.{$ENV['PHASH']}";
+        $hash = "{$password}.${$username}.{$ENV['PHASH']}";
         $hash = hash("sha256", $hash);
 
         return $hash;
