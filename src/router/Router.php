@@ -3,27 +3,27 @@
 class Router {
     
     private static $routes = [
-        "/api/users/" => [
+        "/api/users/$" => [
             "method" => "get",
             "handler" => "GetAllUsersTest",
             "active" => FALSE
         ],
-        "/api/me/" => [
+        "/api/user/$" => [
             "method" => "get",
             "handler" => "LoggedUserInfoResponse",
             "active" => TRUE
         ],
-        "/api/user/(?P<username>[^/]+)/" => [
+        "/api/user/(?P<username>[^/]+)/$" => [
             "method" => "get",
             "handler" => "GetUserInfoResponse",
             "active" => TRUE
         ],
-        "/api/auth/signup/" => [
+        "/api/auth/signup/$" => [
             "method" => "post",
             "handler" => "CreateUserResponse",
             "active" => TRUE
         ],
-        "/api/auth/login/" => [
+        "/api/auth/login/$" => [
             "method" => "post",
             "handler" => "LoginUserResponse",
             "active" => TRUE
